@@ -33,25 +33,32 @@ TrackerMaterialBlock = cms.PSet(
             ########### The Pixel Barrel layers 1-3 ###########
             #PIXB1
             cms.PSet(
-                radius = cms.untracked.double(4.425),
+                radius = cms.untracked.double(3),
                 limits = cms.untracked.vdouble(0.0, 28.391),
                 thickness = cms.untracked.vdouble(0.0217),
                 interactionModels = _trackerMaterialInteractionModels
             ),
             #PIXB2
             cms.PSet(
-                radius = cms.untracked.double(7.312),
+                radius = cms.untracked.double(6.8),
                 limits = cms.untracked.vdouble(0.0, 28.391),
                 thickness = cms.untracked.vdouble(0.0217),
                 interactionModels = _trackerMaterialInteractionModels
             ),
             #PIXB3
             cms.PSet(
-                radius = cms.untracked.double(10.177),
+                radius = cms.untracked.double(10.9),
                 limits = cms.untracked.vdouble(0.0, 28.391),
                 thickness = cms.untracked.vdouble(0.0217),
                 interactionModels = _trackerMaterialInteractionModels
             ),
+            #PIXB4                                                                                      
+            cms.PSet(
+                radius = cms.untracked.double(16),
+                limits = cms.untracked.vdouble(0.0, 28.391),
+                thickness = cms.untracked.vdouble(0.0217),
+                interactionModels = _trackerMaterialInteractionModels
+                ),
             ########### Pixel Outside walls and cables (barrel) ###########
             #PIXBOut5
             cms.PSet(
@@ -170,18 +177,26 @@ TrackerMaterialBlock = cms.PSet(
             ########### Pixel Disks 1-2 ###########
             #PIXD1
             cms.PSet(
-                z = cms.untracked.double(50),
+                z = cms.untracked.double(29.1),
                 limits = cms.untracked.vdouble(4.825, 16.598),
                 thickness = cms.untracked.vdouble(0.058),
                 interactionModels = _trackerMaterialInteractionModels
             ),
             #PIXD2
             cms.PSet(
-                z = cms.untracked.double(53),
+                z = cms.untracked.double(39.6),
                 limits = cms.untracked.vdouble(4.823, 16.598),
                 thickness = cms.untracked.vdouble(0.058),
                 interactionModels = _trackerMaterialInteractionModels                
             ),
+            #PIXD3                                                                                                                         
+            cms.PSet(
+                z = cms.untracked.double(51.6),
+                limits = cms.untracked.vdouble(4.823, 16.598),
+                thickness = cms.untracked.vdouble(0.058),
+                interactionModels = _trackerMaterialInteractionModels
+            ),
+
             ########### Pixel Endcap outside cables ###########
             #PIXBOut6
             cms.PSet(

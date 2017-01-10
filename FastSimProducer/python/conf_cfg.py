@@ -2,7 +2,7 @@ import FWCore.ParameterSet.Config as cms
 
 from Configuration.StandardSequences.Eras import eras
 
-process = cms.Process("DEMO",eras.Run2_2016,eras.fastSim)
+process = cms.Process("DEMO",eras.Run2_2017,eras.fastSim)
 
 process.maxEvents = cms.untracked.PSet(
     input = cms.untracked.int32(10)
@@ -18,7 +18,7 @@ process.load('Configuration.StandardSequences.MagneticField_cff')
 #load and set conditions (required by geometry and magnetic field)
 process.load('Configuration.StandardSequences.FrontierConditions_GlobalTag_cff')
 from Configuration.AlCa.GlobalTag import GlobalTag
-process.GlobalTag = GlobalTag(process.GlobalTag, 'auto:run2_mc', '')          
+process.GlobalTag = GlobalTag(process.GlobalTag, '90X_upgrade2017_design_IdealBS_v0', '')          
 
 # read generator event from file
 process.source = cms.Source("PoolSource",
