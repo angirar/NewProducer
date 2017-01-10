@@ -4,7 +4,7 @@
 cmsrel CMSSW_8_2_0
 cd CMSSW_8_2_0/src
 cmsenv
-git clone git@github.com:cms-fastsim/NewProducer.git FastSimulation
+git clone git@github.com:angirar/NewProducer.git FastSimulation
 USER_CXXFLAGS="-g -D=EDM_ML_DEBUG" scram b -j 8 # special flags to switch on debugging code
 ```
 
