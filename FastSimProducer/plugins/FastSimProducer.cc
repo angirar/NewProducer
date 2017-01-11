@@ -95,6 +95,7 @@ FastSimProducer::FastSimProducer(const edm::ParameterSet& iConfig)
 void
 FastSimProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
 {
+
     LogDebug(MESSAGECATEGORY) << "   produce";
 
     // do the iov thing
