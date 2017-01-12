@@ -2,7 +2,7 @@ import FWCore.ParameterSet.Config as cms
 
 from Configuration.StandardSequences.Eras import eras
 
-process = cms.Process("DEMO",eras.Run2_2017,eras.fastSim)
+process = cms.Process("DEMO",eras.Run2_2016,eras.fastSim)
 
 process.maxEvents = cms.untracked.PSet(
     input = cms.untracked.int32(10)
@@ -23,6 +23,12 @@ process.GlobalTag = GlobalTag(process.GlobalTag, '90X_upgrade2017_design_IdealBS
 # read generator event from file
 process.source = cms.Source("PoolSource",
     fileNames = cms.untracked.vstring('file:gen_muGun.root'),
+     #fileNames = cms.untracked.vstring('file:gen_TTbar.root'),
+)
+
+#output histogram
+process.TFileService = cms.Service("TFileService",
+   fileName = cms.string("hist_muGun.root")
 )
 
 # configure random number generator for simhit production
@@ -62,6 +68,7 @@ process.FEVTDEBUGHLToutput = cms.OutputModule("PoolOutputModule",
     ),
     eventAutoFlushCompressedSize = cms.untracked.int32(10485760),
     fileName = cms.untracked.string('res_muGun.root'),
+    #fileName = cms.untracked.string('res_TTbar.root'),
     outputCommands = process.FEVTDEBUGHLTEventContent.outputCommands,
     splitLevel = cms.untracked.int32(0)
 )
@@ -72,6 +79,7 @@ process.DQMoutput = cms.OutputModule("DQMRootOutputModule",
         filterName = cms.untracked.string('')
     ),
     fileName = cms.untracked.string('dqm_res_muGun.root'),
+    #fileName = cms.untracked.string('dqm_res_TTbar.root'),
     outputCommands = process.DQMEventContent.outputCommands,
     splitLevel = cms.untracked.int32(0)
 )

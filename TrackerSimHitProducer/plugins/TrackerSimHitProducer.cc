@@ -1,10 +1,19 @@
 #include <vector>
 #include <memory>
 #include <algorithm>
+#include <iostream>
+#include <fstream>
+#include <string>
+#include <TFile.h>
+#include <TROOT.h>
+#include <TH2.h>
 
 // framework
 #include "FWCore/Framework/interface/Event.h"
 #include "MagneticField/UniformEngine/src/UniformMagneticField.h"
+#include "FWCore/ServiceRegistry/interface/Service.h"
+#include "CommonTools/UtilAlgos/interface/TFileService.h"
+#include "FWCore/Framework/interface/MakerMacros.h"
 
 // tracking
 #include "TrackingTools/DetLayers/interface/DetLayer.h"
@@ -40,21 +49,22 @@ namespace edm
 }
 
 typedef std::pair<const GeomDet*,TrajectoryStateOnSurface> DetWithState;
-
 namespace fastsim
 {
     class TrackerSimHitProducer : public InteractionModel
     {
     public:
-	TrackerSimHitProducer(const std::string & name,const edm::ParameterSet & cfg);
-	~TrackerSimHitProducer(){;}
-	void interact(Particle & particle,const Layer & layer,std::vector<std::unique_ptr<Particle> > & secondaries,const RandomEngineAndDistribution & random) override;
-	virtual void registerProducts(edm::ProducerBase & producer) const override;
-	virtual void storeProducts(edm::Event & iEvent) override;
-	std::pair<double, PSimHit*> createHitOnDetector(const TrajectoryStateOnSurface & particle,int pdgId,int simTrackId,const GeomDet & detector, GlobalPoint & refPos);
+      TrackerSimHitProducer(const std::string & name,const edm::ParameterSet & cfg);
+      ~TrackerSimHitProducer(){;}
+      void interact(Particle & particle,const Layer & layer,std::vector<std::unique_ptr<Particle> > & secondaries,const RandomEngineAndDistribution & random) override;
+      virtual void registerProducts(edm::ProducerBase & producer) const override;
+      virtual void storeProducts(edm::Event & iEvent) override;
+      std::pair<double, PSimHit*> createHitOnDetector(const TrajectoryStateOnSurface & particle,int pdgId,int simTrackId,const GeomDet & detector, GlobalPoint & refPos);
     private:
-	const float onSurfaceTolerance_;
-	std::unique_ptr<edm::PSimHitContainer> simHitContainer_;
+      edm::Service<TFileService> FileService;
+      const float onSurfaceTolerance_;
+      std::unique_ptr<edm::PSimHitContainer> simHitContainer_;
+      TH2F* simHits;
     };
 }
 
@@ -64,7 +74,10 @@ fastsim::TrackerSimHitProducer::TrackerSimHitProducer(const std::string & name,c
     : fastsim::InteractionModel(name)
     , onSurfaceTolerance_(0.01) // 10 microns // hm, sure this is not 100 microns?
     , simHitContainer_(new edm::PSimHitContainer)
-{}
+{
+  edm::Service<TFileService> fs;
+  simHits = fs->make<TH2F>("SimHits position","Position of Tracker SimHits on the detector layers",1000,-500,500,400,-200,200);
+}
 
 void fastsim::TrackerSimHitProducer::registerProducts(edm::ProducerBase & producer) const
 {
@@ -74,7 +87,13 @@ void fastsim::TrackerSimHitProducer::registerProducts(edm::ProducerBase & produc
 void fastsim::TrackerSimHitProducer::storeProducts(edm::Event & iEvent)
 {
     //std::cout << "Number of Hits: " << simHitContainer_->size() << std::endl;
-    //for(auto shit : *(simHitContainer_.get())){
+  if(simHitContainer_->size()>0){
+    double r2=0;
+    for(auto shit : *(simHitContainer_.get())){
+      r2 = std::pow(shit.localPosition().x(),2)+std::pow(shit.localPosition().y(),2);
+      simHits->Fill(shit.localPosition().z(),std::sqrt(r2));
+    }
+  }
     //  std::cout<<shit.detUnitId()<<": "<<shit.localPosition().x()<<","<<shit.localPosition().y()<<std::endl;
     //}
     iEvent.put(std::move(simHitContainer_), "TrackerHits");
@@ -152,8 +171,14 @@ void fastsim::TrackerSimHitProducer::interact(Particle & particle,const Layer & 
 
     // Fill simHitContainer
     for(std::map<double, PSimHit*>::const_iterator it = distAndHits.begin(); it != distAndHits.end(); it++){
-    	simHitContainer_->push_back(*(it->second));
+      simHitContainer_->push_back(*(it->second));
     }
+    
+    //___________________________New block_______________________________________
+    /*if((int)simHitContainer_.size()>0){
+      for(int i=0; i<(int)simHitContainer_.size(); i++)
+	simHits->Fill(simHitContainer_.at(i).z(),simHitContainer_.at(i).Rho());
+	}*/
     
 }
 

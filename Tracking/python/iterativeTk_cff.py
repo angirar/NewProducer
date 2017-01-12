@@ -6,12 +6,13 @@
 import FWCore.ParameterSet.Config as cms
 from TrackingTools.MaterialEffects.MaterialPropagatorParabolicMf_cff import *
 from FastSimulation.Tracking.InitialStep_cff import *
-from FastSimulation.Tracking.DetachedTripletStep_cff import *
-from FastSimulation.Tracking.LowPtTripletStep_cff import *
-from FastSimulation.Tracking.PixelPairStep_cff import *
-from FastSimulation.Tracking.MixedTripletStep_cff import *
-from FastSimulation.Tracking.PixelLessStep_cff import *
-from FastSimulation.Tracking.TobTecStep_cff import *
+#from FastSimulation.Tracking.DetachedQuadStep_cff import *
+#from FastSimulation.Tracking.DetachedTripletStep_cff import *
+#from FastSimulation.Tracking.LowPtTripletStep_cff import *
+#from FastSimulation.Tracking.PixelPairStep_cff import *
+#from FastSimulation.Tracking.MixedTripletStep_cff import *
+#from FastSimulation.Tracking.PixelLessStep_cff import *
+#from FastSimulation.Tracking.TobTecStep_cff import *
 # the following loads a dummy empty track collection
 # such that FastSim can import earlyGeneralTracks_cfi from full tracking
 # todo: actual implementation of JetCore iteration  
@@ -24,12 +25,14 @@ generalTracksBeforeMixing = RecoTracker.FinalTrackSelectors.earlyGeneralTracks_c
 
 iterTracking = cms.Sequence(
     InitialStep
+ #   +DetachedQuadStep
     +DetachedTripletStep
-    +LowPtTripletStep
-    +PixelPairStep
-    +MixedTripletStep
-    +PixelLessStep
-    +TobTecStep
-    +JetCoreRegionalStep
-    +generalTracksBeforeMixing)
+ #   +LowPtTripletStep
+  #  +PixelPairStep
+   # +MixedTripletStep
+    #+PixelLessStep
+    #+TobTecStep
+    #+JetCoreRegionalStep
+    +generalTracksBeforeMixing
+    )
 
